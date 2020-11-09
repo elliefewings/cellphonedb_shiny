@@ -159,7 +159,7 @@ cellphonedb <- function(pval, smeans, metadata){
                           Target = "reciever.n", Value = "Value", NodeID = "node",
                           units = "Interactions", fontSize = 12)
   
-  out <- list(network=network, plot.senders=plot.senders, plot.recievers=plot.recievers, sankey=sankey)
+  out <- list(network=network, plot.senders=plot.senders, plot.recievers=plot.recievers, sankey=sankey, df=df)
   
   return(out)
   

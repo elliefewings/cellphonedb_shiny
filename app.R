@@ -118,12 +118,13 @@ server <- shinyServer(function(input, output, session) {
 
     #Create plots needed for saving
     observeEvent(input$search,{
-      if(input$gene != "") {
+      if(input$gene != "" & toupper(input$gene) %in% c(cp.out$df$gene_a, cp.out$df$gene_b)) {
         goi.plt.out <- sk.goi(smeans=smeans.file$datapath, metadata=metadata.file$datapath, goi=input$gene)
         } else {
       
       #Set sankey goi plot
-        goi.plt.out <- validate(need(exists("gene"), "No feature supplied"))
+        goi.plt.out <- validate(need(input$gene != "", "No feature supplied or selected feature doesn't exist in data"), need(toupper(input$gene) %in% c(cp.out$df$gene_a, cp.out$df$gene_b), "Selected feature doesn't exist in data"))
+        #output$sk.goi <- renderPlot({goi.plt.out})
         }
       #Output sankey
       output$sk.goi <- renderSankeyNetwork({goi.plt.out})
