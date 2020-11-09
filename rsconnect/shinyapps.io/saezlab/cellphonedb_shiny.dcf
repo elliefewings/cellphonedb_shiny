@@ -1,0 +1,10 @@
+name: cellphonedb_shiny
+title:
+username:
+account: saezlab
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3192694
+bundleId: 3837000
+url: https://saezlab.shinyapps.io/cellphonedb_shiny/
+when: 1604915601.02221
