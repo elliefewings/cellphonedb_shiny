@@ -21,6 +21,7 @@ library(grid)
 library(ggraph)
 library(tidyr)
 library(networkD3)
+library(dqshiny)
 
 # Change data load maximum
 options(shiny.maxRequestSize = 500*1024^2)
@@ -76,7 +77,7 @@ ui <- shinyUI(fluidPage(
                         fluidRow(column(10, align="center", offset=2, id="vert", sankeyNetworkOutput("sankey", width="80%", height="700px"))),
                         fluidRow(tags$hr(style="border-color: black;")),
                         fluidRow(column(10, align="center", offset=2, id="vert", h3("Sankey network of interacting celltypes over gene of interest"))),
-                        fluidRow(column(2, textInput("gene", "Show feature:", ""), actionButton("search", "Search")), column(10, align="center", id="vert", sankeyNetworkOutput("sk.goi", width="80%", height="700px")))
+                        fluidRow(column(2, autocomplete_input("gene", "Show feature:", NULL), actionButton("search", "Search")), column(10, align="center", id="vert", sankeyNetworkOutput("sk.goi", width="80%", height="700px")))
                         ))
 
 # Define server logic
@@ -91,6 +92,11 @@ server <- shinyServer(function(input, output, session) {
     metadata.file <- isolate({input$meta})
     
     cp.out <- cellphonedb(pval=pval.file$datapath, smeans=smeans.file$datapath, metadata=metadata.file$datapath)
+    
+    #Update autocomplete for gene searching
+    genes <- unique(c(cp.out$df$gene_a, cp.out$df$gene_b))
+    update_autocomplete_input(session, "gene",
+                              options = genes)
     
     #Create plots on input of gene
     featurePlotter <- eventReactive(input$load, {
